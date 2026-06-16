@@ -11,5 +11,16 @@ port = '65432'
 clients = {}
 
 #As the network sockets are anonymos and blind (because the operating system sees only the raw connections streams and donest know who the connections belongds to who he wants to talk to i.e
-#we need to know that one of your client i.e kabir is wants to talk to someone in room backrooms). the clients command will help us tell us who sent the packet. to assign clients write inside
-#curly brackets 
+#we need to know that one of your client i.e kabir is wants to talk to someone in room backrooms). the clients command will help us tell us who sent the packet did the clients
+#connection got disconnected or when a message.
+#to assign clients write inside curly brackets client_sock_N(number): 'Username you want to assign the client'
+# and a room by "name":[] in the room curly brackets
+
+rooms = {
+  "publicroom":[]
+  "backrooms":[]
+  "privateroom":[]
+}
+
+# helps the socket programme group the clients together to join a goup type /join group name
+
