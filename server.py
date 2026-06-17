@@ -34,7 +34,7 @@ rooms = {
 
 # we define the function broadcast_room with three parameters, the first being message the string of text the client whats to send, room_class will tell the computer where should the 
 # message go and the third parameter is the network socket of the person who send the message, we set it to None because server itself needs to blast a system message to everyone, 
-#there is no original sender to skip. the seconde line checkks if a room like this exists or not.
+#there is no original sender to skip. the third line checks if a room like this exists or not.line four tell rooms[room_class] tells us how many clients are in the given room 
 
 def broadcast_room(message, room_class, sender_socket=None):
   if room_class in rooms:
