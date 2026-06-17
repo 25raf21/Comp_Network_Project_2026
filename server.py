@@ -48,8 +48,8 @@ def broadcast_room(message, room_class, sender_socket=None):
 #Phase 3: client handleing codes( multi threading core)
 def handle_client(client_socket):
            print("it works")
-           client_socket.send("Hello!")
-           client_socket.close
+           client_socket.send("Hello!".encode('utf-8')
+           client_socket.close()
 
 
 #Phase 4: Core listeining loop 
