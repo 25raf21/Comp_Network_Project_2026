@@ -55,11 +55,14 @@ def handle_client(client_socket):
 #Phase 4: Core listeining loop 
 
 def start_server():
+  #unparameterized python function that wraps our server startup sequence.
            server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  #tells the os that weare using IPv4 addressing criteria(socket.AF_INET, And socket.SOCK_STREAM tells the os to use TCP as the transport-layer protocol.
            server.bind((HOST, PORT))
+  #allows the server to only listein to the specificed address and port combinations and no other application can be used when this application is running
            Server.listen()
            print(f"[RUNNING] Server listening on {host}:{port}")
-           
+  # makes the server listien and show it is listening 
            while True:
                       client_socket, client_address = server.accept()
                       print(f"[NEW NODE] Connection formed from {client_address}")
@@ -68,6 +71,6 @@ def start_server():
                       client_thread.start()
 
 if __name__ == "__main__":
-           start_server()
+    start_server()
 
           
