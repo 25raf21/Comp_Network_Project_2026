@@ -64,11 +64,17 @@ def start_server():
            print(f"[RUNNING] Server listening on {host}:{port}")
   # makes the server listien and show it is listening 
            while True:
+   #the loop will run forever untill contrl c is not pressed 
                       client_socket, client_address = server.accept()
-                      print(f"[NEW NODE] Connection formed from {client_address}")
-                      
+   # this is a blocking call meaning it will cut all executions of and waits for the client to .connect(). once the client connects meaning the three way TCP handshake is complete 
+  #the .accept() wakes up and return the client_socket: a socket that will point to a specific client.the client_address contain the clients ip and oport whihc is used to login 
+             print(f"[NEW NODE] Connection formed from {client_address}")
+# showe textual the login was successful  
                       client_thread = threading.Thread(target=handle_client, args=(client_socket,))
                       client_thread.start()
+#this is where the multi-threading magc occurs that satisfies  the requirmnet to support three or more users 
+#threading.Thread(...)builds a new thread. We point target=to our Phase 3 function ( handle_client), and pass the specific client socket we received in line 9 as an argument via 
+#args=..start()physically kicks off the thread execution in the background.
 
 if __name__ == "__main__":
     start_server()
