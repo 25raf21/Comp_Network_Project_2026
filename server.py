@@ -35,6 +35,9 @@ rooms = {
 # we define the function broadcast_room with three parameters, the first being message the string of text the client whats to send, room_class will tell the computer where should the 
 # message go and the third parameter is the network socket of the person who send the message, we set it to None because server itself needs to blast a system message to everyone, 
 #there is no original sender to skip. the third line checks if a room like this exists or not.line four tell rooms[room_class] tells us how many clients are in the given room 
+# the fifth line helps the user to see that they wrote rather then the app echoing your the message to you. line 7 and 8 try  is used so the server doesnt crash if the a network error 
+#occurs then client_socket.send(...) physically pushes the data out over the internet card to that specific client.and .encode('utf-8') because network sockets cannot transmit Python 
+# string so this translates the characters into 0s and 1s using UTF-8 formatting.
 
 def broadcast_room(message, room_class, sender_socket=None):
   if room_class in rooms:
@@ -44,5 +47,15 @@ def broadcast_room(message, room_class, sender_socket=None):
           client_socket.send(message.encode('utf-8'))
         except:
           pass
-          
+
+#Phase 3: client handleing codes( multi threading core)
+
+
+
+#Phase 4: Core listeining loop 
+
+def start_server():
+           server
+
+
           
