@@ -2,22 +2,19 @@ import socket
 import threading 
 
 host = '0.0.0.0'
-port = '65432'
+port = 65432
 
 # host will tells which network interface is the served allowed to listein to. if host is 127.0.0.1 meaning you have a local network meaning you are communication using on device your 
 # client and server file are on one computer, if host 0.0.0.0 is used meaning the communication is happening between two computers and you will have to change the ser_ip to the ip 
 # address of the computer where the server file is.here the serever only listeins to port 65432 ( write for client file too)
 
-clients = {client_sock_N1: "kabir"
-           client_sock_N2: "rafsan"
-           client_sock_N3: "Shubham"
-}
+clients = {}
 
 #As the network sockets are anonymos and blind (because the operating system sees only the raw connections streams and donest know who the connections belongds to who he wants to talk to i.e
 #we need to know that one of your client i.e kabir is wants to talk to someone in room backrooms). the clients command will help us tell us who sent the packet did the clients
 #connection got disconnected or when a message.
 #to assign clients write inside curly brackets client_sock_N(number): 'Username you want to assign the client'
-# and a room by "name":[] in the room curly brackets
+# and a room by "name":[] in the room curly brackets (client_sock_N1: "kabir")
 
 rooms = {
   "publicroom":[]
@@ -51,21 +48,21 @@ def broadcast_room(message, room_class, sender_socket=None):
 #Phase 3: client handleing codes( multi threading core)
 def handle_client(client_socket):
            print("it works")
-           client_socket.send("Hello from the server placeholder!")
+           client_socket.send("Hello!")
            client_socket.close
 
 
 #Phase 4: Core listeining loop 
 
 def start_server():
-           server = socket.socket(socket.AF_INet, socket.SOCK_STREAM)
+           server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
            server.bind((HOST, PORT))
            Server.listen()
            print(f"[RUNNING] Server listening on {host}:{port}")
            
            while True:
                       client_socket, client_address = server.accept()
-                      print(f"[NEW NODE] Connection formed from {Client_address}")
+                      print(f"[NEW NODE] Connection formed from {client_address}")
                       
                       client_thread = threading.Thread(target=handle_client, args=(client_socket,))
                       client_thread.start()
