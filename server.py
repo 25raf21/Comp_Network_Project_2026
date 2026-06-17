@@ -22,5 +22,9 @@ rooms = {
   "privateroom":[]
 }
 
-# helps the socket programme group the clients together to join a goup type /join group name
+# helps the socket programme group the clients together to join a goup type "/join group name"
+
+# phase 1 completed: the goal ws to first create a setup then as we are not using a database we need to use the RAM to store and track the information.
+#(who is online and which room the conversation is going on )
+
 
