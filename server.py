@@ -49,13 +49,28 @@ def broadcast_room(message, room_class, sender_socket=None):
           pass
 
 #Phase 3: client handleing codes( multi threading core)
-
+def handle_client(client_socket):
+           print("it works")
+           client_socket.send("Hello from the server placeholder!")
+           client_socket.close
 
 
 #Phase 4: Core listeining loop 
 
 def start_server():
-           server
+           server = socket.socket(socket.AF_INet, socket.SOCK_STREAM)
+           server.bind((HOST, PORT))
+           Server.listen()
+           print(f"[RUNNING] Server listening on {host}:{port}")
+           
+           while True:
+                      client_socket, client_address = server.accept()
+                      print(f"[NEW NODE] Connection formed from {Client_address}")
+                      
+                      client_thread = threading.Thread(target=handle_client, args=(client_socket,))
+                      client_thread.start()
 
+if __name__ == "__main__":
+           start_server()
 
           
