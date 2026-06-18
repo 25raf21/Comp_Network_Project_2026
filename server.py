@@ -70,7 +70,7 @@ def client_manag(client_socket):
     
     print(f"[LOG] {username} enrollment was successfull and the User has entered '{current_room}'.")
     broadcast_room(f"SYSTEM: {username}has joined the room.", current_room)
-#this block of helps register the state of the program by saving hte socket and adding it to the default room 
+#this block of helps register the state of the program by saving the socket and adding it to the default room 
 
 
 
