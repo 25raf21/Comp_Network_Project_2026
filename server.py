@@ -53,6 +53,11 @@ def handle_client(client_socket):
     cleint_socket.send("CMD_REQQ_USER".encode('utf-8'))
     username = client_socket.rev(1024).decode('utf-8').strip()
     
+    if username in client.values() or username == "":
+      client_socket.send("ERR_USER_TAKEN".encode('utf-8'))
+      client_socket.close()
+      return
+    
 
 
 
