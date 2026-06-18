@@ -44,8 +44,17 @@ def broadcast_room(message, room_class, sender_socket=None):
           client_socket.send(message.encode('utf-8'))
         except:
           pass
-
 #Phase 3: client handleing codes( multi threading core)
+def handle_client(client_socket):
+  current_room = "publicroom"
+  usernmae = ""
+  
+  try:
+    cleint_socket.send("CMD_REQQ_USER".encode('utf-8'))
+    username = client_socket.rev(1024).decode('utf-8').strip()
+    
+
+
 
 
 #Phase 4: Core listeining loop 
