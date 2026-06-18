@@ -47,4 +47,13 @@ def receive_messages(client_socket):
   sys.exist()#Cleans up and kills the client application 
   #execution immediately if the loop crashes or ends
 
+def send_message(client_socket):
+  while Ture:
+    try:
+      if message.strip() == "":
+      continue
+      
+
+
+
 
