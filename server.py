@@ -53,12 +53,12 @@ def client_manag(client_socket):
 # username = "": creates a blank variable so that our finally:so it doent crsh if a user disconnets before finishing registration
   try:
     client_socket.send("CMD_REQQ_USER".encode('utf-8'))
-    username = client_socket.rev(1024).decode('utf-8').strip()
+    username = client_socket.recv(1024).decode('utf-8').strip()
 #application hanshake protocol: asks the clinet to identify themselfs. client_socket.send("CMD_REQQ_USER".encode('utf-8')): sends a unique control flag string to the client.this tells the client programm 
 #"the server is waiting for you ot enter your username".
 #username = client_socket.rev(1024).decode('utf-8').strip(): stops all thread execution until the client doesnt respomd wiht their useranme string.
     
-    if username in client.values() or username == "":
+    if username in clients.values() or username == "":
       client_socket.send("ERR_USER_TAKEN".encode('utf-8'))
       client_socket.close()
       return
@@ -82,17 +82,19 @@ def client_manag(client_socket):
 #hitting our if not data: break safty net 
 
 
-if data.startswitch("/join "):# checks if incomeing text has a management command instead of a normal caht sentence 
+if data.startswith("/join "):# checks if incomeing text has a management command instead of a normal caht sentence 
   new_room = data.split(" ")[1].strip() #splices the input test message string at the blank space character to extract the room target name
 
   if new_room in rooms:
     # remove the client that requested the change from the old room list
     rooms[current_room].remove(client_socket)
     broadcast_room(f"SYSTEM: {username} left the room.", current_room)
-  # adds the client in the requested new room list.
+  
+    # adds the client in the requested new room list.
     current_room =new_room
-    rooms[current_room].apend(client_socket)
-  #an indicator that confirms to the user that they have switched rooms and to other people in the room
+    rooms[current_room].append(client_socket)
+  
+    #an indicator that confirms to the user that they have switched rooms and to other people in the room
     client_socket.send(f"SYSTEM: Switch to room '{current_room}'".encode('utf-8'))
     broadcast_room(f"SYSTEM: {username} entered the room.", current_room, client_socket)
   else:
@@ -104,10 +106,10 @@ else:
     broadcast_room(formatted_mesg, current_room, client_socket)
 
 except Exception as E:
-    print("f[Error connection crash for user '{username}': {E}]"
+    print("f[Error] connection crash for user '{username}': {E}]"
 
 finally:# this used as a clean up and terminate routining 
-  if client_socket in client:
+  if client_socket in clients:
     del client[client_socket]
   if client_socket in rooms[current_room]:
     rooms[current_room].remove(client_socket)
@@ -127,7 +129,7 @@ def start_server():
   #tells the os that weare using IPv4 addressing criteria(socket.AF_INET, And socket.SOCK_STREAM tells the os to use TCP as the transport-layer protocol.
            server.bind((HOST, PORT))
   #allows the server to only listein to the specificed address and port combinations and no other application can be used when this application is running
-           Server.listen()
+           server.listen()
            print(f"[RUNNING] Server listening on {host}:{port}")
   # makes the server listien and show it is listening 
            while True:
