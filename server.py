@@ -68,9 +68,49 @@ def client_manag(client_socket):
     clients[client_socket] = username #changes the slient dict.
     rooms[current_room].append(client_socket) #changes this socket into the active list inside room{"piblicroom"}. 
     
-    print(f"[LOG] {username} enrollment was successfull and the User has entered '{current_room}'.")
-    broadcast_room(f"SYSTEM: {username}has joined the room.", current_room)
+   print(f"[LOG] {username} enrollment was successfull and the User has entered '{current_room}'.")
+   broadcast_room(f"SYSTEM: {username}has joined the room.", current_room)
 #this block of helps register the state of the program by saving the socket and adding it to the default room 
+
+#packet proccessing loop
+    while True:
+      data = client_socket.recv(1024).decode('utf-8')
+      # wait for data from this client 
+      if not data:
+        break # break if data is empty 
+#data = client_socket.recv(1024): untill a singler pushes a transmission packet it stays blocked and if the connection breaks recv() returns empty bytes(b''),
+#hitting our if not data: break safty net 
+
+
+if data.startswitch("/join "):# checks if incomeing text has a management command instead of a normal caht sentence 
+  new_room = data.split(" ")[1].strip() #splices the input test message string at the blank space character to extract the room target name
+
+  if new_room in rooms:
+    # remove the client that requested the change from the old room list
+    rooms[current_room].remove(client_socket)
+    broadcast_room(f"SYSTEM: {username} left the room.", current_room)
+  # adds the client in the requested new room list.
+    current_room =new_room
+    rooms[current_room].apend(client_socket)
+  #an indicator that confirms to the user that they have switched rooms and to other people in the room
+    client_socket.send(f"SYSTEM: Switch to room '{current_room}'".encode('utf-8'))
+    broadcast_room(f"SYSTEM: {username} entered the room.", current_room, client_socket)
+  else:
+    client_socket.send("SYSTEM_ERR: Invalid Room!".encode('utf-8'))
+
+else:
+  # chat routing:fromats the message and broadcasting it 
+    formatted_mesg = f"[{current_room}] {username}: {data}"
+    broadcast_room(formatted_mesg, current_room, client_socket)
+
+except Exception as E:
+    print("f[Error connection crash for user '{username}': {E}]"
+    
+
+
+
+
+
 
 
 
