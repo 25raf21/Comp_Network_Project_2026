@@ -106,14 +106,6 @@ else:
 except Exception as E:
     print("f[Error connection crash for user '{username}': {E}]"
     
-
-
-
-
-
-
-
-
 #Phase 4: Core listeining loop 
 
 def start_server():
