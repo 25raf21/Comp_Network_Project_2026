@@ -44,21 +44,33 @@ def broadcast_room(message, room_class, sender_socket=None):
           client_socket.send(message.encode('utf-8'))
         except:
           pass
-#Phase 3: client handleing codes( multi threading core)
-def handle_client(client_socket):
-  current_room = "publicroom"
-  usernmae = ""
-  
+#Phase 3: client handleing codes( multi threading core) meaning ask for user names, chekc for dupilcate username, add them to defalult chat room and listeining of their message.
+
+def client_manag(client_socket):
+  default_room = "publicroom"
+  username = ""
+# default_room = "publicroom":sets the default room destination string.Every user starts from here 
+# username = "": creates a blank variable so that our finally:so it doent crsh if a user disconnets before finishing registration
   try:
-    cleint_socket.send("CMD_REQQ_USER".encode('utf-8'))
+    client_socket.send("CMD_REQQ_USER".encode('utf-8'))
     username = client_socket.rev(1024).decode('utf-8').strip()
+#application hanshake protocol: asks the clinet to identify themselfs. client_socket.send("CMD_REQQ_USER".encode('utf-8')): sends a unique control flag string to the client.this tells the client programm 
+#"the server is waiting for you ot enter your username".
+#username = client_socket.rev(1024).decode('utf-8').strip(): stops all thread execution until the client doesnt respomd wiht their useranme string.
     
     if username in client.values() or username == "":
       client_socket.send("ERR_USER_TAKEN".encode('utf-8'))
       client_socket.close()
       return
+#if username in clients.values():: Loops through our clients state dictionary to ensure that every user has a unique name and dont share an identical active nickname. 
+#If they do, it shoots back ERR_USER_TAKEN and drops the line immediately.
+      
+    clients[client_socket] = username #changes the slient dict.
+    rooms[current_room].append(client_socket) #changes this socket into the active list inside room{"piblicroom"}. 
     
-
+    print(f"[LOG] {username} enrollment was successfull and the User has entered '{current_room}'.")
+    broadcast_room(f"SYSTEM: {username}has joined the room.", current_room)
+#this block of helps register the state of the program by saving hte socket and adding it to the default room 
 
 
 
@@ -80,10 +92,10 @@ def start_server():
   #the .accept() wakes up and return the client_socket: a socket that will point to a specific client.the client_address contain the clients ip and oport whihc is used to login 
              print(f"[NEW NODE] Connection formed from {client_address}")
 # showe textual the login was successful  
-                      client_thread = threading.Thread(target=handle_client, args=(client_socket,))
+                      client_thread = threading.Thread(target=client_manag, args=(client_socket,))
                       client_thread.start()
 #this is where the multi-threading magc occurs that satisfies  the requirmnet to support three or more users 
-#threading.Thread(...)builds a new thread. We point target=to our Phase 3 function ( handle_client), and pass the specific client socket we received in line 9 as an argument via 
+#threading.Thread(...)builds a new thread. We point target=to our Phase 3 function ( client_manag), and pass the specific client socket we received in line 9 as an argument via 
 #args=..start()physically kicks off the thread execution in the background.
 
 if __name__ == "__main__":
