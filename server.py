@@ -47,9 +47,9 @@ def broadcast_room(message, room_class, sender_socket=None):
 #Phase 3: client handleing codes( multi threading core) meaning ask for user names, chekc for dupilcate username, add them to defalult chat room and listeining of their message.
 
 def client_manag(client_socket):
-  default_room = "publicroom"
+  current_room = "publicroom"
   username = ""
-# default_room = "publicroom":sets the default room destination string.Every user starts from here 
+# current_room = "publicroom":sets the default room destination string.Every user starts from here 
 # username = "": creates a blank variable so that our finally:so it doent crsh if a user disconnets before finishing registration
   try:
     client_socket.send("CMD_REQQ_USER".encode('utf-8'))
@@ -105,6 +105,19 @@ else:
 
 except Exception as E:
     print("f[Error connection crash for user '{username}': {E}]"
+
+finally:# this used as a clean up and terminate routining 
+  if client_socket in client:
+    del client[client_socket]
+  if client_socket in rooms[current_room]:
+    rooms[current_room].remove(client_socket)
+#finally:the code guaranteed to execute by the Python runtime machine no matter what—whether the user typed
+#/quit, shut down their client window cleanly, or completely lost power. It deletes 
+#keys using del to avoid memory leakage and safely executes .close().
+
+client_socket.close()
+print(f“[LOG] Connection is terminated for {username}.“)
+broadcast_room(f“SYSTEM: {username} has disconnected.“,current_room)
     
 #Phase 4: Core listeining loop 
 
