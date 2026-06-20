@@ -57,8 +57,8 @@ def send_message(client_socket):# Transmission function wrapper
       client_socket.send(message.encode('utf-8'))#turns text into binary bytes and pushes them out through the local network 
       #card onto the wire toward the server host.
                          
-      if message.strip() == "/quit":
-             break #if /quit, the loops is exits
+      if message.strip() == "quit":
+             break #if quit, the loops is exits
                          
     except Exception as e :
           print(f"[ERROR] Falied to send the message: {e}")
