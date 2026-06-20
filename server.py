@@ -17,8 +17,8 @@ clients = {}
 # and a room by "name":[] in the room curly brackets (client_sock_N1: "kabir")
 
 rooms = {
-  "publicroom":[]
-  "backrooms":[]
+  "publicroom":[],
+  "backrooms":[],
   "privateroom":[]
 }
 
@@ -106,7 +106,7 @@ else:
     broadcast_room(formatted_mesg, current_room, client_socket)
 
 except Exception as E:
-    print("f[Error] connection crash for user '{username}': {E}]"
+    print(f"[Error] connection crash for user '{username}': {E}"]
 
 finally:# this used as a clean up and terminate routining 
   if client_socket in clients:
@@ -118,8 +118,8 @@ finally:# this used as a clean up and terminate routining
 #keys using del to avoid memory leakage and safely executes .close().
 
 client_socket.close()
-print(f“[LOG] Connection is terminated for {username}.“)
-broadcast_room(f“SYSTEM: {username} has disconnected.“,current_room)
+print(f"[LOG] Connection is terminated for {username}.")
+broadcast_room(f"SYSTEM: {username} has disconnected.",current_room)
     
 #Phase 4: Core listeining loop 
 
@@ -127,7 +127,7 @@ def start_server():
   #unparameterized python function that wraps our server startup sequence.
            server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   #tells the os that weare using IPv4 addressing criteria(socket.AF_INET, And socket.SOCK_STREAM tells the os to use TCP as the transport-layer protocol.
-           server.bind((HOST, PORT))
+           server.bind((host, port))
   #allows the server to only listein to the specificed address and port combinations and no other application can be used when this application is running
            server.listen()
            print(f"[RUNNING] Server listening on {host}:{port}")
