@@ -81,7 +81,7 @@ def client_manag(client_socket):
 #data = client_socket.recv(1024): untill a singler pushes a transmission packet it stays blocked and if the connection breaks recv() returns empty bytes(b''),
 #hitting our if not data: break safty net 
 
-
+# commands to join rooms:
       if data.startswith("join "):# checks if incomeing text has a management command instead of a normal caht sentence 
         new_room = data.split(" ")[1].strip() #splices the input test message string at the blank space character to extract the room target name
 
@@ -99,6 +99,8 @@ def client_manag(client_socket):
           broadcast_room(f"SYSTEM: {username} entered the room.", current_room, client_socket)
         else:
           client_socket.send("SYSTEM_ERR: Invalid Room!".encode('utf-8'))
+          
+      
 
       else:
   # chat routing:fromats the message and broadcasting it 
