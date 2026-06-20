@@ -82,44 +82,44 @@ def client_manag(client_socket):
 #hitting our if not data: break safty net 
 
 
-if data.startswith("/join "):# checks if incomeing text has a management command instead of a normal caht sentence 
-  new_room = data.split(" ")[1].strip() #splices the input test message string at the blank space character to extract the room target name
+    if data.startswith("/join "):# checks if incomeing text has a management command instead of a normal caht sentence 
+    new_room = data.split(" ")[1].strip() #splices the input test message string at the blank space character to extract the room target name
 
-  if new_room in rooms:
+    if new_room in rooms:
     # remove the client that requested the change from the old room list
-    rooms[current_room].remove(client_socket)
-    broadcast_room(f"SYSTEM: {username} left the room.", current_room)
+      rooms[current_room].remove(client_socket)
+      broadcast_room(f"SYSTEM: {username} left the room.", current_room)
   
     # adds the client in the requested new room list.
-    current_room =new_room
-    rooms[current_room].append(client_socket)
+      current_room =new_room
+      rooms[current_room].append(client_socket)
   
     #an indicator that confirms to the user that they have switched rooms and to other people in the room
-    client_socket.send(f"SYSTEM: Switch to room '{current_room}'".encode('utf-8'))
-    broadcast_room(f"SYSTEM: {username} entered the room.", current_room, client_socket)
+      client_socket.send(f"SYSTEM: Switch to room '{current_room}'".encode('utf-8'))
+      broadcast_room(f"SYSTEM: {username} entered the room.", current_room, client_socket)
+    else:
+      client_socket.send("SYSTEM_ERR: Invalid Room!".encode('utf-8'))
+
   else:
-    client_socket.send("SYSTEM_ERR: Invalid Room!".encode('utf-8'))
-
-else:
   # chat routing:fromats the message and broadcasting it 
-    formatted_mesg = f"[{current_room}] {username}: {data}"
-    broadcast_room(formatted_mesg, current_room, client_socket)
+      formatted_mesg = f"[{current_room}] {username}: {data}"
+      broadcast_room(formatted_mesg, current_room, client_socket)
 
-except Exception as E:
-    print(f"[Error] connection crash for user '{username}': {E}"]
+  except Exception as E:
+      print(f"[Error] connection crash for user '{username}': {E}"]
 
-finally:# this used as a clean up and terminate routining 
-  if client_socket in clients:
-    del client[client_socket]
-  if client_socket in rooms[current_room]:
-    rooms[current_room].remove(client_socket)
+  finally:# this used as a clean up and terminate routining 
+    if client_socket in clients:
+      del client[client_socket]
+    if client_socket in rooms[current_room]:
+      rooms[current_room].remove(client_socket)
 #finally:the code guaranteed to execute by the Python runtime machine no matter what—whether the user typed
 #/quit, shut down their client window cleanly, or completely lost power. It deletes 
 #keys using del to avoid memory leakage and safely executes .close().
 
-client_socket.close()
-print(f"[LOG] Connection is terminated for {username}.")
-broadcast_room(f"SYSTEM: {username} has disconnected.",current_room)
+  client_socket.close()
+  print(f"[LOG] Connection is terminated for {username}.")
+  broadcast_room(f"SYSTEM: {username} has disconnected.",current_room)
     
 #Phase 4: Core listeining loop 
 
