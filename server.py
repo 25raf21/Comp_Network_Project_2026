@@ -69,7 +69,7 @@ def client_manag(client_socket):
     rooms[current_room].append(client_socket) #changes this socket into the active list inside room{"piblicroom"}. 
     
     print(f"[LOG] {username} enrollment was successfull and the User has entered '{current_room}'.")
-    broadcast_room(f"SYSTEM: {username}has joined the room.", current_room)
+    broadcast_room(f"SYSTEM: {username} has joined the room.", current_room)
 #this block of helps register the state of the program by saving the socket and adding it to the default room 
 
 #packet proccessing loop
