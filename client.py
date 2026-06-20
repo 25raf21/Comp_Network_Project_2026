@@ -33,7 +33,7 @@ def receive_messages(client_socket):
       #an input() code asking you for your username, wraps it in bytes using .encode('utf-8'), and sends it straight back up the line.
       elif data == "ERR_USER_TAKEN":
         #Intercepts the username duplicate flag. If Kabir is occupied , it alerts you and breaks the loop.
-        PRINT("[ERROR] That username already exists! Disconnecting...")
+        print("[ERROR] That username already exists! Disconnecting...")
         break
       else:
         print(f"\n{data}")#If the server data isn't a handshake flag,it's a real chat message or a system notice! It prints it cleanly
@@ -50,7 +50,7 @@ def receive_messages(client_socket):
 
 # the sender 
 def send_message(client_socket):# Transmission function wrapper
-  while Ture:
+  while True:
     try:
       message = input("> ")#this blocks the keyboard call when you are typing a meassage or executing a commands to switch the chat rooms
       if message.strip() == "":# if you enter a empty string this code makes it so it is ignored to not waste resources 
@@ -59,35 +59,35 @@ def send_message(client_socket):# Transmission function wrapper
       client_socket.send(message.encode('utf-8'))#turns text into binary bytes and pushes them out through the local network 
       #card onto the wire toward the server host.
                          
-       if message.strip() == "/quit":
+      if message.strip() == "/quit":
              break #if /quit, the loops is exits
                          
-       except Exception as e :
+    except Exception as e :
           print(f"[ERROR] Falied to send the message: {e}")
           break
 
-client_socket.close()
-sys.exit()
-
+  client_socket.close() 
+  sys.exit()
 
 def start_client():
   client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   #matches the sever network settings exactly uses IPv4 and TCP stram bassed connection 
   try:
     client_socket.connect((ser_Ip,port))# fires of the TCP Three way handshake with the server machine
-    print(f"[] Connected to the server at {host}:{port}")
+    print(f"[] Connected to the server at {ser_Ip}:{port}")
   except Exception as e:
     print(f"[CRITICAL] Could not connect with the server: {e}")
     return
-  recieve_thread = threading.Thread(target=receive_messages, args=(client_socket,))
+  
+  receive_thread = threading.Thread(target=receive_messages, args=(client_socket,))
   #this code creates our separate sub-thread pathway. We assign target= to our inbound message listener function and pass the connected socket interval into its parameters using args=                                  
-    receive_thread.daemon = True 
+  receive_thread.daemon = True 
   #this flags the sub-thread as a daemon worker. This means it depends on the lifecycle of the main thread. When you quit or close the client app, 
   #the os automatically terminates this background thread rather than letting it sit alone in your computer ram.
 
-    receive_thread.start() #Wakes up the sub-thread and tells it to begin running by itself in the background.
+  receive_thread.start() #Wakes up the sub-thread and tells it to begin running by itself in the background.
 
-    send_message(client_socket)#aunches our keyboard monitoring input loop immediately on the foreground main thread.
+  send_message(client_socket)#aunches our keyboard monitoring input loop immediately on the foreground main thread.
 
 if __name__ == "__main__":
   start_client()
