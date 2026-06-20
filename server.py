@@ -82,7 +82,7 @@ def client_manag(client_socket):
 #hitting our if not data: break safty net 
 
 
-      if data.startswith("/join "):# checks if incomeing text has a management command instead of a normal caht sentence 
+      if data.startswith("join "):# checks if incomeing text has a management command instead of a normal caht sentence 
         new_room = data.split(" ")[1].strip() #splices the input test message string at the blank space character to extract the room target name
 
         if new_room in rooms:
