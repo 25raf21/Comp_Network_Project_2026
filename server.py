@@ -99,9 +99,25 @@ def client_manag(client_socket):
           broadcast_room(f"SYSTEM: {username} entered the room.", current_room, client_socket)
         else:
           client_socket.send("SYSTEM_ERR: Invalid Room!".encode('utf-8'))
-          
-      
-
+    #quiting block 
+      elif data.strip() == "quit":# the command to exit 
+            if current_room != "publicroom":# this funtion checks if the client is in the coustome chat room or in the defalut lobby
+                
+                print(f"[ROOM CHANGE] {username} left '{current_room}' and fell back to 'publicroom'")
+                # this indicates that the user has re-entered the default lobby after leaving the room  
+                
+                rooms[current_room].remove(client_socket)# removes the client form recieving the messages from that room 
+                broadcast_room(f"SYSTEM: {username} left the room.", current_room)
+                
+                current_room = "publicroom"# moves the client back to the publicroom rather then quiting the whole application 
+                rooms[current_room].append(client_socket)# it switches the clients channel to recive only meassages that are written in the public lobby 
+                
+                # Notify the user and the public room
+                client_socket.send(f"SYSTEM: Returned to '{current_room}'".encode('utf-8'))
+                broadcast_room(f"SYSTEM: {username} returned to the room.", current_room, client_socket)
+            else:
+                # If they are already in publicroom, break the loop to disconnect completely
+                break
       else:
   # chat routing:fromats the message and broadcasting it 
         formatted_mesg = f"[{current_room}] {username}: {data}"
