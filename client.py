@@ -38,7 +38,7 @@ def receive_messages(client_socket):
       else:
         print(f"\n{data}")#If the server data isn't a handshake flag,it's a real chat message or a system notice! It prints it cleanly
         #on your terminal layout screen.
-        print("> ", end=="", flush=True)#Because messages from other clients drop onto your screen 
+        print("> ", end="", flush=True)#Because messages from other clients drop onto your screen 
         #unexpectedly, this forces the terminal text system to draw a clean prompt arrow (> ) without 
         #starting a new newline. This lets you see what you are currently typing.
     except Exception as E:
