@@ -78,7 +78,7 @@ def start_client():
     
     ser_flag = client_socket.recv(1024).decode('utf-8')# this decoded text string arrives from the server
 
-    if server_flag == "CMD_REQ_USER":# this checks if the message just recived from the server matches the contol flag string.
+    if ser_flag == "CMD_REQ_USER":# this checks if the message just recived from the server matches the contol flag string.
       username = input("Enter your username: ").strip()#type a username
       client_socket.send(username.encode('utf-8'))
       
