@@ -25,12 +25,7 @@ def receive_messages(client_socket):
       if not data:
         print("\n[SYSTEM] connection closed by the server.")
         break
-      # if the connection breaks or drops recv()= returns completely empty bytes(b''). this helps to cleanly breakout loop execution if the server shut down.
-      if data == "CMD_REQQ_USER":
-        username = input("Enter your username: ").strip()
-        client_socket.send(username.encode('utf-8'))
-        #this heklps implement the Application Layer Handshake. The client intercepts this string from the server. Instead of showing it to the user, it triggers 
-      #an input() code asking you for your username, wraps it in bytes using .encode('utf-8'), and sends it straight back up the line.
+        
       elif data == "ERR_USER_TAKEN":
         #Intercepts the username duplicate flag. If Kabir is occupied , it alerts you and breaks the loop.
         print("[ERROR] That username already exists! Disconnecting...")
@@ -42,11 +37,14 @@ def receive_messages(client_socket):
         #unexpectedly, this forces the terminal text system to draw a clean prompt arrow (> ) without 
         #starting a new newline. This lets you see what you are currently typing.
     except Exception as E:
-      print(f"\n[ERROR] connection lost: {E}")
+      
       break
-  client_socket.close()
-  sys.exist()#Cleans up and kills the client application 
-  #execution immediately if the loop crashes or ends
+   #Cleans up kills the operation out of the thread loop    
+  try:
+    client_socket.close()
+  except:
+    pass
+  sys.exit()
 
 # the sender 
 def send_message(client_socket):# Transmission function wrapper
