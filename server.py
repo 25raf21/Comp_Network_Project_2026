@@ -68,8 +68,8 @@ def client_manag(client_socket):
     clients[client_socket] = username #changes the slient dict.
     rooms[current_room].append(client_socket) #changes this socket into the active list inside room{"piblicroom"}. 
     
-   print(f"[LOG] {username} enrollment was successfull and the User has entered '{current_room}'.")
-   broadcast_room(f"SYSTEM: {username}has joined the room.", current_room)
+    print(f"[LOG] {username} enrollment was successfull and the User has entered '{current_room}'.")
+    broadcast_room(f"SYSTEM: {username}has joined the room.", current_room)
 #this block of helps register the state of the program by saving the socket and adding it to the default room 
 
 #packet proccessing loop
@@ -82,65 +82,65 @@ def client_manag(client_socket):
 #hitting our if not data: break safty net 
 
 
-    if data.startswith("/join "):# checks if incomeing text has a management command instead of a normal caht sentence 
-    new_room = data.split(" ")[1].strip() #splices the input test message string at the blank space character to extract the room target name
+      if data.startswith("/join "):# checks if incomeing text has a management command instead of a normal caht sentence 
+        new_room = data.split(" ")[1].strip() #splices the input test message string at the blank space character to extract the room target name
 
-    if new_room in rooms:
+        if new_room in rooms:
     # remove the client that requested the change from the old room list
-      rooms[current_room].remove(client_socket)
-      broadcast_room(f"SYSTEM: {username} left the room.", current_room)
+          rooms[current_room].remove(client_socket)
+          broadcast_room(f"SYSTEM: {username} left the room.", current_room)
   
     # adds the client in the requested new room list.
-      current_room =new_room
-      rooms[current_room].append(client_socket)
+          current_room =new_room
+          rooms[current_room].append(client_socket)
   
     #an indicator that confirms to the user that they have switched rooms and to other people in the room
-      client_socket.send(f"SYSTEM: Switch to room '{current_room}'".encode('utf-8'))
-      broadcast_room(f"SYSTEM: {username} entered the room.", current_room, client_socket)
-    else:
-      client_socket.send("SYSTEM_ERR: Invalid Room!".encode('utf-8'))
+          client_socket.send(f"SYSTEM: Switch to room '{current_room}'".encode('utf-8'))
+          broadcast_room(f"SYSTEM: {username} entered the room.", current_room, client_socket)
+        else:
+          client_socket.send("SYSTEM_ERR: Invalid Room!".encode('utf-8'))
 
-  else:
+      else:
   # chat routing:fromats the message and broadcasting it 
-      formatted_mesg = f"[{current_room}] {username}: {data}"
-      broadcast_room(formatted_mesg, current_room, client_socket)
+        formatted_mesg = f"[{current_room}] {username}: {data}"
+        broadcast_room(formatted_mesg, current_room, client_socket)
 
   except Exception as E:
-      print(f"[Error] connection crash for user '{username}': {E}"]
+    print(f"[Error] connection crash for user '{username}': {E}")
 
   finally:# this used as a clean up and terminate routining 
     if client_socket in clients:
-      del client[client_socket]
+      del clients[client_socket]
     if client_socket in rooms[current_room]:
       rooms[current_room].remove(client_socket)
 #finally:the code guaranteed to execute by the Python runtime machine no matter what—whether the user typed
 #/quit, shut down their client window cleanly, or completely lost power. It deletes 
 #keys using del to avoid memory leakage and safely executes .close().
 
-  client_socket.close()
-  print(f"[LOG] Connection is terminated for {username}.")
-  broadcast_room(f"SYSTEM: {username} has disconnected.",current_room)
+    client_socket.close()
+    print(f"[LOG] Connection is terminated for {username}.")
+    broadcast_room(f"SYSTEM: {username} has disconnected.",current_room)
     
 #Phase 4: Core listeining loop 
 
 def start_server():
   #unparameterized python function that wraps our server startup sequence.
-           server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   #tells the os that weare using IPv4 addressing criteria(socket.AF_INET, And socket.SOCK_STREAM tells the os to use TCP as the transport-layer protocol.
-           server.bind((host, port))
+  server.bind((host, port))
   #allows the server to only listein to the specificed address and port combinations and no other application can be used when this application is running
-           server.listen()
-           print(f"[RUNNING] Server listening on {host}:{port}")
+  server.listen()
+  print(f"[RUNNING] Server listening on {host}:{port}")
   # makes the server listien and show it is listening 
-           while True:
+  while True:
    #the loop will run forever untill contrl c is not pressed 
-                      client_socket, client_address = server.accept()
+    client_socket, client_address = server.accept()
    # this is a blocking call meaning it will cut all executions of and waits for the client to .connect(). once the client connects meaning the three way TCP handshake is complete 
-  #the .accept() wakes up and return the client_socket: a socket that will point to a specific client.the client_address contain the clients ip and oport whihc is used to login 
-             print(f"[NEW NODE] Connection formed from {client_address}")
+   #the .accept() wakes up and return the client_socket: a socket that will point to a specific client.the client_address contain the clients ip and oport whihc is used to login 
+    print(f"[NEW NODE] Connection formed from {client_address}")
 # showe textual the login was successful  
-                      client_thread = threading.Thread(target=client_manag, args=(client_socket,))
-                      client_thread.start()
+    client_thread = threading.Thread(target=client_manag, args=(client_socket,))
+    client_thread.start()
 #this is where the multi-threading magc occurs that satisfies  the requirmnet to support three or more users 
 #threading.Thread(...)builds a new thread. We point target=to our Phase 3 function ( client_manag), and pass the specific client socket we received in line 9 as an argument via 
 #args=..start()physically kicks off the thread execution in the background.
