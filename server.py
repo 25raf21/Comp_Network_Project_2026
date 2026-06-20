@@ -99,8 +99,8 @@ def client_manag(client_socket):
           broadcast_room(f"SYSTEM: {username} entered the room.", current_room, client_socket)
         else:
           client_socket.send("SYSTEM_ERR: Invalid Room!".encode('utf-8'))
-    #quiting block 
-      elif data.strip() == "quit":# the command to exit 
+    #leave block 
+      elif data.strip() == "leave":# the command to exit 
             if current_room != "publicroom":# this funtion checks if the client is in the coustome chat room or in the defalut lobby
                 
                 print(f"[ROOM CHANGE] {username} left '{current_room}' and fell back to 'publicroom'")
