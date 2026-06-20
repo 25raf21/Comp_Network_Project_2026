@@ -73,11 +73,10 @@ def start_client():
   try:
     client_socket.connect((ser_Ip,port))# fires of the TCP Three way handshake with the server machine
     print(f"[VICTORY] Connected to the server at {ser_Ip}:{port}")
-    
-    ser_flag = client_socket.recv(1024).decode('utf-8')# this decoded text string arrives from the server
 
-    if ser_flag == "CMD_REQ_USER":# this checks if the message just recived from the server matches the contol flag string.
-      
+    ser_flag = client_socket.recv(1024).decode('utf-8')# the handshake happence here first
+
+    if ser_flag == "CMD_REQQ_USER": # this checks if the message just recived from the server matches the contol flag string.
       username = input("Enter your username: ").strip()#type a username
       client_socket.send(username.encode('utf-8'))
       
