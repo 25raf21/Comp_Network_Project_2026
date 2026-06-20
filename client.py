@@ -44,7 +44,7 @@ def receive_messages(client_socket):
     except Exception as E:
       print(f"\n[ERROR] connection lost: {E}")
       break
-  cleint_socket.close()
+  client_socket.close()
   sys.exist()#Cleans up and kills the client application 
   #execution immediately if the loop crashes or ends
 
@@ -56,7 +56,7 @@ def send_message(client_socket):# Transmission function wrapper
       if message.strip() == "":# if you enter a empty string this code makes it so it is ignored to not waste resources 
          continue
       
-      client_socket.send(message.encode('utf-8')#turns text into binary bytes and pushes them out through the local network 
+      client_socket.send(message.encode('utf-8'))#turns text into binary bytes and pushes them out through the local network 
       #card onto the wire toward the server host.
                          
        if message.strip() == "/quit":
@@ -66,20 +66,20 @@ def send_message(client_socket):# Transmission function wrapper
           print(f"[ERROR] Falied to send the message: {e}")
           break
 
-cleint_socket.close()
+client_socket.close()
 sys.exit()
 
 
 def start_client():
-  client_socket = socket.socket(socket.AF_INET, scoket.SOCK_STREAM)
+  client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   #matches the sever network settings exactly uses IPv4 and TCP stram bassed connection 
   try:
-    client_socket.connect((host,port))# fires of the TCP Three way handshake with the server machine
+    client_socket.connect((ser_Ip,port))# fires of the TCP Three way handshake with the server machine
     print(f"[] Connected to the server at {host}:{port}")
   except Exception as e:
     print(f"[CRITICAL] Could not connect with the server: {e}")
     return
-  recieve_thread = threading.Thread(Thread(target=receive_messages, args=(client_socket,))
+  recieve_thread = threading.Thread(target=receive_messages, args=(client_socket,))
   #this code creates our separate sub-thread pathway. We assign target= to our inbound message listener function and pass the connected socket interval into its parameters using args=                                  
     receive_thread.daemon = True 
   #this flags the sub-thread as a daemon worker. This means it depends on the lifecycle of the main thread. When you quit or close the client app, 
@@ -87,7 +87,7 @@ def start_client():
 
     receive_thread.start() #Wakes up the sub-thread and tells it to begin running by itself in the background.
 
-    send_messages(client_socket)#aunches our keyboard monitoring input loop immediately on the foreground main thread.
+    send_message(client_socket)#aunches our keyboard monitoring input loop immediately on the foreground main thread.
 
 if __name__ == "__main__":
   start_client()
