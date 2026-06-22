@@ -23,9 +23,12 @@ def chat_window():
     chat_display = scrolledtext.ScrolledText(root, state="Disabled", wrap=tk.WORD, bg="#000000", fg="FFFFFF", font=("Courier New", 13)) 
     chat_display.pack(padx=12, pady=12, fill=tk.BOTH, expand=True) 
     
+    input_frame = tk.Frame(root, bg="#2f3136") 
+    input_frame.pack(padx=10, pady=10, fill=tk.X)
+    
     #Displays the input text area along with focusing the text cursor onto the text box
     message_input = tk.Entry(input_frame, bg="#F7F7F9", fg="#FFFFFF", insertbackground="black", font=("Courier New", 13))
-    message_input.pack(side=tk.LEFT, fill=tk.tk.X, expand=True, ipady=4)
+    message_input.pack(side=tk.LEFT, fill=tk.X, expand=True, ipady=4)
     message_input.focus_set() 
     
     
@@ -69,7 +72,7 @@ def fetch_username_popup(on_submit):
             on_submit(chosen_name)
         else: 
             messagebox.showwarning("Warning", "Username cannot be empty!") 
-    Button = tk.Button(popup, text="Join room", command=handle_click, bg="#F7F7F7", fg="white", font=("Courier News", 10, "bold"))
+    Button = tk.Button(popup, text="Join room", command=handle_click, bg="#F7F7F7", fg="white", font=("Courier News", 10, "bold")) 
     Button.bind("<Return>", lambda e: handle_click())
 
     
