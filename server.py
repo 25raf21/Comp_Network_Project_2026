@@ -90,7 +90,8 @@ def client_manag(client_socket):
           rooms[new_room] = []
           print(f"[LOG] custom room created: '{new_room}' by user '{username}'")
           client_socket.send(f"SYSTEM: User requested '{new_room}' has been created...".encode('utf-8'))
-
+        
+        if new_room in rooms:
     # remove the client that requested the change from the old room list
           rooms[current_room].remove(client_socket)
           broadcast_room(f"SYSTEM: {username} left the room.", current_room)
