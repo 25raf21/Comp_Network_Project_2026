@@ -69,7 +69,7 @@ def fetch_username_popup(on_submit):
             on_submit(chosen_name)
         else: 
             messagebox.showwarning("Warning", "Username cannot be empty!") 
-    Button = tk.Button(popup, text="Join room", command=handle_click, bg="#F7F7F7", fg="Courier News", 10, "bold") 
+    Button = tk.Button(popup, text="Join room", command=handle_click, bg="#F7F7F7", fg="white", font=("Courier News", 10, "bold"))
     Button.bind("<Return>", lambda e: handle_click())
 
     
