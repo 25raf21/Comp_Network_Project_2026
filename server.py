@@ -105,6 +105,30 @@ def client_manag(client_socket):
           broadcast_room(f"SYSTEM: {username} entered the room.", current_room, client_socket)
         else:
           client_socket.send("SYSTEM_ERR: Invalid Room!".encode('utf-8'))
+
+          # these codes helps clients to invite each other to rooms 
+      elif data.startswith("invite "):
+        try:
+          # the command format for inviting the username
+          target_user = data.split(" ")[1].strip()
+          
+          # the code makes it so that we search trough the memory to track dictionary to locate the target socket
+          target_socket = None
+          for sock, name in clients.items():
+            if name == target_user:
+              target_socket = sock
+              break
+              
+          if target_socket:
+            # Delivers the invite control string to the specific user across the network 
+            invite_mess = f"\n[NOTIFICATION] {username} has invited you to join '{current_room}'. Please enter 'join {current_room}' if you want to accpet the invite and join the room ."
+            target_socket.send(invite_mess.encode('utf-8'))
+            client_socket.send(f"SYSTEM: Invitation safely transmitted to '{target_user}'.".encode('utf-8'))
+          else:
+            client_socket.send(f"SYSTEM_ERR: User '{target_user}' is currently offline or invalid.".encode('utf-8'))
+        except:
+          client_socket.send("SYSTEM_ERR: Invalid instruction format. Use 'invite <username>'".encode('utf-8'))
+          
     #leave block 
       elif data.strip() == "leave":# the command to exit 
             if current_room != "publicroom":# this funtion checks if the client is in the coustome chat room or in the defalut lobby
