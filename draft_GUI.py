@@ -62,3 +62,14 @@ def fetch_username_popup(on_submit):
     entry = tk.Entry(popup, font=("Courier News", 13)) 
     entry.pack(padx=18, pady=6, fill=tk.X) 
     entry.focus_set()
+    def handle_click(): 
+        chosen_name = entry.get().strip()
+        if chosen_name: 
+            popup.destroy()
+            on_submit(chosen_name)
+        else: 
+            messagebox.showwarning("Warning", "Username cannot be empty!") 
+    Button = tk.Button(popup, text="Join room", command=handle_click, bg="#F7F7F7", fg="Courier News", 10, "bold") 
+    Button.bind("<Return>", lambda e: handle_click())
+
+    
