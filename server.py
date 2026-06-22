@@ -84,7 +84,13 @@ def client_manag(client_socket):
 # commands to join rooms:
       if data.startswith("join "):# checks if incomeing text has a management command instead of a normal caht sentence 
         new_room = data.split(" ")[1].strip() #splices the input test message string at the blank space character to extract the room target name
-
+        
+        # this code helps user make there own room and then adds it into the room dictionary
+        if new_room not in rooms:
+          rooms[new_room] = []
+          print(f"[LOG] custom room created: '{new_room}' by user '{username}'")
+          client_socket.send(f"SYSTEM: User requested '{new_room}' has been created...".encode('utf-8'))
+          
         if new_room in rooms:
     # remove the client that requested the change from the old room list
           rooms[current_room].remove(client_socket)
