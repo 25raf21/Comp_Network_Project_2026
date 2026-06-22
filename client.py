@@ -67,6 +67,7 @@ def send_message(client_socket):# Transmission function wrapper
   client_socket.close() 
   sys.exit()
 
+# execution code and assigning cilents 
 def start_client():
   client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   #matches the sever network settings exactly uses IPv4 and TCP stram bassed connection 
