@@ -132,7 +132,7 @@ def client_manag(client_socket):
     if client_socket in rooms[current_room]:
       rooms[current_room].remove(client_socket)
 #finally:the code guaranteed to execute by the Python runtime machine no matter what—whether the user typed
-#/quit, shut down their client window cleanly, or completely lost power. It deletes 
+#quit, shut down their client window cleanly, or completely lost power. It deletes 
 #keys using del to avoid memory leakage and safely executes .close().
 
     client_socket.close()
