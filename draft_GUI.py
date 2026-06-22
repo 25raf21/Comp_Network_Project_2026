@@ -1,3 +1,7 @@
+import tkinter as tk
+from tkinter import scrolledtext, messagebox
+
+root=None
 chat_display=None
 message_input=None
 status_label=None
@@ -23,3 +27,38 @@ def chat_window():
     message_input = tk.Entry(input_frame, bg="#F7F7F9", fg="#FFFFFF", insertbackground="black", font=("Courier New", 13))
     message_input.pack(side=tk.LEFT, fill=tk.tk.X, expand=True, ipady=4)
     message_input.focus_set() 
+    
+    
+    send_button = tk.Button(input_frame, text="Send", bg="#CCFF00", fg="white", font=("Courier New", 8, "bold"), relief=tk.FLAT, padx=15)
+    send_button.pack(side=tk.RIGHT, padx=(10,0))
+    
+# Texting_Chat function safely opens the GUI window, adds the text and relocks it back
+def Texting_Chat(text_context): 
+    
+    global chat_display
+    if chat_display: 
+        chat_display.configure(state="normal") #Unlocks the chat
+        chat_display.insert(tk.END, text_context + "\n") #Pushes the text
+        chat_display.configure(state="disabled") #Locks it back up
+        chat_display.yview(tk.END) #Snaps the scrollbar back to the bottom
+
+def fetch_username_popup(on_submit):
+    
+    global root
+    
+    popup = tk.Toplevel(root)
+    popup.title("Identity Setup") 
+    popup.geometry("400x400") 
+    popup.configure(bg="#FFFFFF") 
+    popup.transient(root) 
+    popup.grab_set()
+    
+    label = tk.Label(popup, text="Enter your Username: ", bg="#000000", fg="whtie") 
+    label.pack(pady=12) 
+    
+    entry = tk.Entry(popup, font="Courier News", bg="#000000", fg="white") 
+    label.pack(pady=12)
+    
+    entry = tk.Entry(popup, font=("Courier News", 13)) 
+    entry.pack(padx=18, pady=6, fill=tk.X) 
+    entry.focus_set()
