@@ -2,6 +2,20 @@ import socket
 import threading 
 import sys
 
+
+'''Importing tkinter for GUI interface'''
+import tkinter as tk
+from tkinter import scrolledtext, messagebox
+
+'''Global variables for GUI and network handles'''
+client_socket=None
+root=None
+chat_display=None
+message_input=None
+status_label=None
+
+'''Added Tkinter and responsible global variables for GUI elements''' 
+
 # we are importing the the python library for sockets and threads. Sockets the funcations that will allow for the communicating to occur and threads so the code doesnt get stuck waiting
 #for you to type and shows message recieved only after the clients has hit send. we use the sys library because it instantly kills the entire multi-threaded program if a connection drops 
 #which prevents the terminal window from freezing up on a blocked keyboard input.
