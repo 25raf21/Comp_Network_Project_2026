@@ -175,21 +175,20 @@ def fetch_username_popup():
 
 # execution code and assigning cilents 
 def start_client():
-  client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  #matches the sever network settings exactly uses IPv4 and TCP stram bassed connection 
-  try:
-    client_socket.connect((ser_Ip,port))# fires of the TCP Three way handshake with the server machine
-    print(f"[VICTORY] Connected to the server at {ser_Ip}:{port}")
-
-    ser_flag = client_socket.recv(1024).decode('utf-8')# the handshake happence here first
-
-    if ser_flag == "CMD_REQQ_USER": #this checks if the message just recived from the server matches the contol flag string.
-      username = input("Enter your username: ").strip()#type a username
-      client_socket.send(username.encode('utf-8'))
-      
-  except Exception as e:
-    print(f"[CRITICAL] Could not connect with the server: {e}")
-    return
+      global client_socket
+      chat_window()
+      client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+      try:
+        client_socket.connect((ser_Ip, port)) 
+        ser_flag = client_socket.recv(1024).decode('utf-8')
+        
+        if ser_flag == "CMD_REQQ_USER": 
+          fetch_username_popup()
+      except Exception as e:
+        messagebox.showerror("Critical Error", f"Could not connect with the server: {e}")
+        root.destroy()
+        return
+      root.mainloop()
   
   receive_thread = threading.Thread(target=receive_messages, args=(client_socket,))
   #this code creates our separate sub-thread pathway. We assign target= to our inbound message listener function and pass the connected socket interval into its parameters using args=                                  
