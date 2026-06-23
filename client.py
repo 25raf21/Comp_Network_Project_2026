@@ -82,25 +82,30 @@ def receive_messages():
   sys.exit()
 
 # the sender 
-def send_message(client_socket):# Transmission function wrapper
-  while True:
+def send_message(event=None):
+    '''Pulls text from the Tkinter text entry area and transmits it to the server.'''
+    global client_socket, message_input, root
+    
+    # Grabs the text out of the GUI input box
+    message = message_input.get()
+    
+    if message.strip() == "":
+        return
+        
     try:
-      message = input("> ")#this blocks the keyboard call when you are typing a meassage or executing a commands to switch the chat rooms
-      if message.strip() == "":# if you enter a empty string this code makes it so it is ignored to not waste resources 
-         continue
-      
-      client_socket.send(message.encode('utf-8'))#turns text into binary bytes and pushes them out through the local network 
-      #card onto the wire toward the server host.
+        # Send the encoded bytes across the network
+        client_socket.send(message.encode('utf-8'))
+        
+        # Clear the input box so you can type your next message
+        message_input.delete(0, tk.END)
+                           
+        if message.strip() == "quit":
+            client_socket.close()
+            root.destroy()
+            sys.exit()
                          
-      if message.strip() == "quit":
-             break #if quit, the loops is exits
-                         
-    except Exception as e :
-          print(f"[ERROR] Falied to send the message: {e}")
-          break
-
-  client_socket.close() 
-  sys.exit()
+    except Exception as e:
+        Texting_Chat(f"[ERROR] Failed to send the message: {e}")
 
 # execution code and assigning cilents 
 def start_client():
