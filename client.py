@@ -107,6 +107,34 @@ def send_message(event=None):
     except Exception as e:
         Texting_Chat(f"[ERROR] Failed to send the message: {e}")
 
+
+
+def chat_window(): 
+    """Responsible for building the primary visual layout containers using Tkinter."""
+    global root, chat_display, message_input, status_label
+    
+    root = tk.Tk()
+    root.title("Chat Client") 
+    root.geometry("600x600") 
+    root.configure(bg="#f7f7f7") 
+    
+    status_label = tk.Label(root, text="Connecting to the server...", bg="#615e5e", fg="#ffffff", font=("Courier New", 14))
+    status_label.pack(fill=tk.X)
+    
+    chat_display = scrolledtext.ScrolledText(root, state="disabled", wrap=tk.WORD, bg="#000000", fg="#FFFFFF", font=("Courier New", 13)) 
+    chat_display.pack(padx=12, pady=12, fill=tk.BOTH, expand=True) 
+    
+    input_frame = tk.Frame(root, bg="#2f3136") 
+    input_frame.pack(padx=10, pady=10, fill=tk.X)
+    
+    message_input = tk.Entry(input_frame, bg="#F7F7F9", fg="#000000", insertbackground="black", font=("Courier New", 13))
+    message_input.pack(side=tk.LEFT, fill=tk.X, expand=True, ipady=4)
+    message_input.focus_set() 
+    message_input.bind("<Return>", send_message) 
+    
+    send_button = tk.Button(input_frame, text="Send", command=send_message, bg="#CCFF00", fg="black", font=("Courier New", 8, "bold"), relief=tk.FLAT, padx=15)
+    send_button.pack(side=tk.RIGHT, padx=(10,0))
+
 # execution code and assigning cilents 
 def start_client():
   client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
