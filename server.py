@@ -151,7 +151,8 @@ def client_manag(client_socket):
       else:
   # chat routing:fromats the message and broadcasting it 
         formatted_mesg = f"[{current_room}] {username}: {data}"
-        broadcast_room(formatted_mesg, current_room, client_socket)
+        broadcast_room(formatted_mesg, current_room)
+        '''Removed client_socket for GUI'''
 
   except Exception as E:
     print(f"[Error] connection crash for user '{username}': {E}")
