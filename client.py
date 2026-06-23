@@ -30,6 +30,17 @@ port = 65432
 
 # This was part one of the code where we created the set up) 
 
+
+def Texting_Chat(text_context): 
+    """Safely opens the GUI log window, adds the incoming text, and relocks it."""
+    global chat_display
+    if chat_display: 
+        chat_display.configure(state="normal")
+        chat_display.insert(tk.END, text_context + "\n")
+        chat_display.configure(state="disabled")
+        chat_display.yview(tk.END)
+
+
 # the receiver
 def receive_messages(client_socket):
   while True:# continuous packet collection loop
