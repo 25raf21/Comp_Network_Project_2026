@@ -42,36 +42,6 @@ def Texting_Chat(text_context):
 
 
 # the receiver
-def receive_messages(client_socket):
-  while True:# continuous packet collection loop
-    try:
-      data = client_socket.recv(1024).decode('utf-8')
-      #this blocks the network call. it can read up to 1024 bytes instantly decodes them using utf-8
-      if not data:
-        print("\n[SYSTEM] connection closed by the server.")
-        break
-        
-      elif data == "ERR_USER_TAKEN":
-        #Intercepts the username duplicate flag. If Kabir is occupied , it alerts you and breaks the loop.
-        print("[ERROR] That username already exists! Disconnecting...")
-        break
-      else:
-        print(f"\n{data}")#If the server data isn't a handshake flag,it's a real chat message or a system notice! It prints it cleanly
-        #on your terminal layout screen.
-        print("> ", end="", flush=True)#Because messages from other clients drop onto your screen 
-        #unexpectedly, this forces the terminal text system to draw a clean prompt arrow (> ) without 
-        #starting a new newline. This lets you see what you are currently typing.
-    except Exception as E:
-      
-      break
-   #Cleans up kills the operation out of the thread loop    
-  try:
-    client_socket.close()
-  except:
-    pass
-  sys.exit()
-
-# the sender 
 def receive_messages():
   
   '''Addition of global client socket'''
@@ -109,6 +79,27 @@ def receive_messages():
     pass
   if root: 
     root.destroy()
+  sys.exit()
+
+# the sender 
+def send_message(client_socket):# Transmission function wrapper
+  while True:
+    try:
+      message = input("> ")#this blocks the keyboard call when you are typing a meassage or executing a commands to switch the chat rooms
+      if message.strip() == "":# if you enter a empty string this code makes it so it is ignored to not waste resources 
+         continue
+      
+      client_socket.send(message.encode('utf-8'))#turns text into binary bytes and pushes them out through the local network 
+      #card onto the wire toward the server host.
+                         
+      if message.strip() == "quit":
+             break #if quit, the loops is exits
+                         
+    except Exception as e :
+          print(f"[ERROR] Falied to send the message: {e}")
+          break
+
+  client_socket.close() 
   sys.exit()
 
 # execution code and assigning cilents 
