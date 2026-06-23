@@ -189,16 +189,7 @@ def start_client():
         root.destroy()
         return
       root.mainloop()
-  
-  receive_thread = threading.Thread(target=receive_messages, args=(client_socket,))
-  #this code creates our separate sub-thread pathway. We assign target= to our inbound message listener function and pass the connected socket interval into its parameters using args=                                  
-  receive_thread.daemon = True 
-  #this flags the sub-thread as a daemon worker. This means it depends on the lifecycle of the main thread. When you quit or close the client app, 
-  #the os automatically terminates this background thread rather than letting it sit alone in your computer ram.
 
-  receive_thread.start() #Wakes up the sub-thread and tells it to begin running by itself in the background.
-
-  send_message(client_socket)#aunches our keyboard monitoring input loop immediately on the foreground main thread.
 
 if __name__ == "__main__":
   start_client()
