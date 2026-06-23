@@ -135,6 +135,44 @@ def chat_window():
     send_button = tk.Button(input_frame, text="Send", command=send_message, bg="#CCFF00", fg="black", font=("Courier New", 8, "bold"), relief=tk.FLAT, padx=15)
     send_button.pack(side=tk.RIGHT, padx=(10,0))
 
+
+def fetch_username_popup():
+    """Spawns a temporary modal popup context window layer to finalize user handle setup."""
+    global root, client_socket
+    
+    popup = tk.Toplevel(root)
+    popup.title("Identity Setup") 
+    popup.geometry("350x150") 
+    popup.configure(bg="#FFFFFF") 
+    popup.transient(root) 
+    popup.grab_set() 
+    
+    label = tk.Label(popup, text="Enter your Username: ", bg="#FFFFFF", fg="#000000", font=("Courier New", 12)) 
+    label.pack(pady=12) 
+    
+    entry = tk.Entry(popup, font=("Courier New", 13), bg="#F7F7F9", fg="#000000") 
+    entry.pack(padx=18, pady=6, fill=tk.X) 
+    entry.focus_set()
+    
+    def handle_click(event=None): 
+        chosen_name = entry.get().strip()
+        if chosen_name: 
+            client_socket.send(chosen_name.encode('utf-8'))
+            popup.destroy()
+            
+            # Fire background listener thread *after* username verification handshake
+            receive_thread = threading.Thread(target=receive_messages, daemon=True)
+            receive_thread.start() 
+            
+            status_label.config(text=f"Connected as: {chosen_name}", bg="#43b581")
+            Texting_Chat(f"[SYSTEM] Identity authorized. Welcome, {chosen_name}!")
+        else: 
+            messagebox.showwarning("Warning", "Username cannot be empty!") 
+            
+    join_button = tk.Button(popup, text="Join Room", command=handle_click, bg="#F7F7F7", fg="black", font=("Courier New", 10, "bold")) 
+    join_button.pack(pady=10)
+    popup.bind("<Return>", handle_click)
+
 # execution code and assigning cilents 
 def start_client():
   client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
